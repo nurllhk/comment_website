@@ -1,0 +1,162 @@
+<IfModule mod_deflate.c>
+AddOutputFilterByType DEFLATE application/javascript
+AddOutputFilterByType DEFLATE application/json
+AddOutputFilterByType DEFLATE application/x-javascript
+AddOutputFilterByType DEFLATE application/vnd.ms-fontobject
+AddOutputFilterByType DEFLATE font/ttf
+AddOutputFilterByType DEFLATE font/otf
+AddOutputFilterByType DEFLATE image/svg+xml
+AddOutputFilterByType DEFLATE text/css
+AddOutputFilterByType DEFLATE text/javascript
+AddOutputFilterByType DEFLATE text/plain
+AddOutputFilterByType DEFLATE text/html
+AddOutputFilterByType DEFLATE text/xml
+</IfModule>
+
+<IfModule mod_mime.c>
+AddType font/opentype .otf
+AddType application/font-woff .woff
+AddType application/font-woff2 .woff2
+AddType application/x-font-ttf .ttf
+AddType application/vnd.ms-fontobject .eot
+AddType image/svg+xml .svg
+</IfModule>
+
+<IfModule mod_expires.c>
+ExpiresActive On
+ExpiresDefault "access plus 1 seconds"
+ExpiresByType application/javascript "access plus 6 months"
+ExpiresByType application/vnd.ms-fontobject "access plus 6 months"
+ExpiresByType application/xhtml+xml "access plus 10 minutes"
+ExpiresByType application/x-javascript "access plus 6 months"
+ExpiresByType application/x-shockwave-flash "access plus 6 months"
+ExpiresByType application/x-woff "access plus 6 months"
+ExpiresByType application/x-woff2 "access plus 6 months"
+ExpiresByType font/otf "access plus 6 months"
+ExpiresByType font/ttf "access plus 6 months"
+ExpiresByType image/gif "access plus 6 months"
+ExpiresByType image/jpeg "access plus 6 months"
+ExpiresByType image/png "access plus 6 months"
+ExpiresByType image/webp "access plus 6 months"
+ExpiresByType image/svg+xml "access plus 6 months"
+ExpiresByType image/x-icon "access plus 6 months"
+ExpiresByType text/css "access plus 6 months"
+ExpiresByType text/html "access plus 10 minutes"
+ExpiresByType text/javascript "access plus 6 months"
+ExpiresByType video/x-flv "access plus 6 months"
+</IfModule>
+
+<IfModule mod_headers.c>
+<FilesMatch "\\.(ico|jpe?g|png|webp|gif|swf)$">
+Header set Cache-Control "max-age=14515200, public"
+</FilesMatch>
+<FilesMatch "\\.(css)$">
+Header set Cache-Control "max-age=14515200, public"
+</FilesMatch>
+<FilesMatch "\\.(js)$">
+Header set Cache-Control "max-age=14515200, public"
+</FilesMatch>
+<FilesMatch "\.(ttf|otf|eot|woff|woff2|svg)$">
+Header set Cache-Control "max-age=14515200, public"
+</FilesMatch>
+</IfModule>
+
+Options -Indexes
+
+RewriteEngine on
+ErrorDocument 404 https://www.acikliyorum.com/404
+RewriteCond %{HTTPS} off [OR]
+RewriteCond %{HTTP_HOST} !^www\. [NC]
+RewriteRule (.*) https://www.acikliyorum.com%{REQUEST_URI} [R=301,L]
+RewriteRule ^404$ index.php?page=404
+RewriteRule ^sira/puan$ index.php?page=home&order=point
+RewriteRule ^sitemaps/sitemap_([_A-Za-z0-9-]+)_page_([0-9]+).xml$ sitemap/sitemap_$1.php?page_no=$2
+RewriteRule ^ajax$ ajax.php
+RewriteRule ^auth/facebook$ oauth/facebook.php
+RewriteRule ^auth/google$ oauth/google.php
+RewriteRule ^captcha$ captcha/index.php
+RewriteCond %{QUERY_STRING} ^q=(.*)$
+RewriteRule ^arama$ index.php?page=search&q=%1
+RewriteRule ^arama/(.*)/page/([0-9]+)$ index.php?page=search&q=$1&page_no=$2
+RewriteRule ^giris$ index.php?page=login
+RewriteCond %{QUERY_STRING} ^referer=([_A-Za-z0-9-]+)$
+RewriteRule ^kayit-ol?$ index.php?page=register&referer=%1
+RewriteRule ^kayit-ol$ index.php?page=register
+RewriteRule ^cikis$ index.php?page=logout
+RewriteRule ^hesabim$ index.php?page=account
+RewriteRule ^mesajlar$ index.php?page=messages
+RewriteRule ^mesajlar/([0-9]+)$ index.php?page=messages_user&id=$1
+RewriteRule ^hesabim/bakiye$ index.php?page=account_balance
+RewriteRule ^hesabim/incelemeler/page/([0-9]+)$ index.php?page=account_reviews&page_no=$1
+RewriteRule ^hesabim/incelemeler$ index.php?page=account_reviews
+RewriteRule ^hesabim/yorumlar$ index.php?page=account_comments
+RewriteRule ^hesabim/engellenenler$ index.php?page=account_blocks
+RewriteRule ^hesabim/takipciler$ index.php?page=account_followers
+RewriteRule ^hesabim/takip-edilenler$ index.php?page=account_followeds
+RewriteRule ^hesabim/bekleyen-duzenleme$ index.php?page=account_waiting_reviews
+
+RewriteRule ^profil/([0-9]+)/(.*)/yorumlar/page/([0-9]+)$ index.php?page=profile_comments&id=$1&sef=$2&page_no=$3
+RewriteRule ^profil/([0-9]+)/(.*)/yorumlar$ index.php?page=profile_comments&id=$1&sef=$2 [NE]
+RewriteRule ^profil/([0-9]+)/(.*)/page/([0-9]+)$ index.php?page=profile&id=$1&sef=$2&page_no=$3
+RewriteRule ^profil/([0-9]+)/(.*)$ index.php?page=profile&id=$1&sef=$2 [NE]
+RewriteRule ^urun-ekle$ index.php?page=add_product
+RewriteRule ^inceleme-duzenle/([0-9]+)$ index.php?page=revise_review&id=$1
+RewriteRule ^ilk-adim/([0-9]+)$ index.php?page=first_review_step&id=$1
+RewriteRule ^inceleme-ekle/([0-9]+)$ index.php?page=add_review_detail&id=$1
+RewriteRule ^inceleme-ekle$ index.php?page=add_review
+RewriteRule ^bildirimler/page/([0-9]+)$ index.php?page=account_notifications&page_no=$1
+RewriteRule ^bildirimler$ index.php?page=account_notifications
+RewriteRule ^destek-talebi-olustur$ index.php?page=support_new
+RewriteRule ^destek-talebi/([0-9]+)$ index.php?page=support_detail&id=$1
+RewriteRule ^destek$ index.php?page=support
+
+RewriteRule ^urun/([0-9]+)/(.*)-yorumlari/page/([0-9]+)$ index.php?page=product&id=$1&sef=$2&page_no=$3 [NE]
+RewriteRule ^urun/([0-9]+)/(.*)-yorumlari$ index.php?page=product&id=$1&sef=$2 [NE]
+
+RewriteRule ^kategori/([0-9]+)/([_A-Za-z0-9-]+)/liste/page/([0-9]+)$ index.php?page=category_liste&id=$1&sef=$2&page_no=$3
+RewriteRule ^kategori/([0-9]+)/([_A-Za-z0-9-]+)/liste$ index.php?page=category_liste&id=$1&sef=$2
+
+RewriteRule ^kategori/([0-9]+)/([_A-Za-z0-9-]+)/sira/puan/page/([0-9]+)$ index.php?page=category&id=$1&sef=$2&order=point&page_no=$3
+RewriteRule ^kategori/([0-9]+)/([_A-Za-z0-9-]+)/sira/puan$ index.php?page=category&id=$1&sef=$2&order=point
+
+RewriteRule ^kategori/([0-9]+)/([_A-Za-z0-9-]+)/page/([0-9]+)$ index.php?page=category&id=$1&sef=$2&page_no=$3
+RewriteRule ^kategori/([0-9]+)/([_A-Za-z0-9-]+)$ index.php?page=category&id=$1&sef=$2
+
+RewriteRule ^marka/([0-9]+)/([_A-Za-z0-9-]+)/liste/page/([0-9]+)$ index.php?page=brand_liste&id=$1&sef=$2&page_no=$3
+RewriteRule ^marka/([0-9]+)/([_A-Za-z0-9-]+)/liste$ index.php?page=brand_liste&id=$1&sef=$2
+
+RewriteRule ^marka/([0-9]+)/([_A-Za-z0-9-]+)/sira/puan/page/([0-9]+)$ index.php?page=brand&id=$1&sef=$2&order=point&page_no=$3
+RewriteRule ^marka/([0-9]+)/([_A-Za-z0-9-]+)/sira/puan$ index.php?page=brand&id=$1&sef=$2&order=point
+
+RewriteRule ^marka/([0-9]+)/([_A-Za-z0-9-]+)/page/([0-9]+)$ index.php?page=brand&id=$1&sef=$2&page_no=$3
+RewriteRule ^marka/([0-9]+)/([_A-Za-z0-9-]+)$ index.php?page=brand&id=$1&sef=$2
+
+RewriteRule ^olumlu-incelemeler/page/([0-9]+)$ index.php?page=reviews&type=positive&page_no=$1
+RewriteRule ^olumlu-incelemeler$ index.php?page=reviews&type=positive
+
+RewriteRule ^olumsuz-incelemeler/page/([0-9]+)$ index.php?page=reviews&type=negative&page_no=$1
+RewriteRule ^olumsuz-incelemeler$ index.php?page=reviews&type=negative
+
+
+RewriteRule ^yorumlari/([0-9]+)/([_A-Za-z0-9-]+)$ index.php?page=review&id=$1&sef=$2
+
+
+RewriteRule ^markalar/page/([0-9]+)$ index.php?page=brands&page_no=$1
+RewriteRule ^markalar$ index.php?page=brands
+RewriteRule ^en-iyi-kullanicilar/page/([0-9]+)$ index.php?page=tops&page_no=$1
+RewriteRule ^en-iyi-kullanicilar$ index.php?page=tops
+RewriteRule ^nasil-calisir$ index.php?page=how_to_work
+RewriteRule ^sifremi-unuttum$ index.php?page=forgot_password
+RewriteRule ^sifre-yenileme/([_A-Za-z0-9-]+)$ index.php?page=renew_password&hash=$1
+RewriteRule ^bekleyen-aktivasyon$ index.php?page=wait_activate&hash=$1
+RewriteRule ^aktivasyon/([_A-Za-z0-9-]+)$ index.php?page=activate&hash=$1
+RewriteRule ^inceleme-red-nedenleri$ index.php?page=rejected_types
+RewriteRule ^iletisim$ index.php?page=contact
+RewriteRule ^sayfa/([_A-Za-z0-9-]+)$ index.php?page=page&sef=$1
+
+# php -- BEGIN cPanel-generated handler, do not edit
+# Set the “ea-php74” package as the default “PHP” programming language.
+<IfModule mime_module>
+  AddHandler application/x-httpd-ea-php74 .php .php7 .phtml
+</IfModule>
+# php -- END cPanel-generated handler, do not edit
